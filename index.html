@@ -1,20 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Three.js Testseite</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <title>Three.js Test</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
 </head>
 <body>
-<div id="container"></div>
+<!-- Three.js von CDN laden -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+<script>
+  // Szene, Kamera und Renderer erstellen
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+  );
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-<!-- Three.js (UMD build) -->
-<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
-<!-- OrbitControls (UMD example, benötigt globales THREE) -->
-<script src="https://unpkg.com/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
+  // Einen einfachen Würfel hinzufügen
+  const geometry = new THREE.BoxGeometry();
+  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
 
-<!-- Dein Skript -->
-<script src="js/main.js"></script>
+  // Kamera positionieren
+  camera.position.z = 5;
+
+  // Animation
+  function animate() {
+    requestAnimationFrame(animate);
+
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Fenstergröße anpassen
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
 </body>
 </html>
